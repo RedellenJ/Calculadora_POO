@@ -1,27 +1,69 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-require_once 'Historico.php';
-require_once 'Operacaobase.php';
+require_once __DIR__ . '/interface.php';
+require_once __DIR__ . '/Operacaobase.php';
+require_once __DIR__ . '/src/Historico.php';
 
-class Usuario {
-    public function __construct(
-        private string $nome,
-        private Historico $historico,
-        private ?float $resultadoAtual = null
-    ) {}
+use App\Calculadora\Historico;
 
-    public function registrarOperacao(string $operacao): void {
-        $this->historico->adicionar($operacao);
-    }
-
-    public function verHistorico(): array {
-        return $this->historico->listar();
-    }
-
-    public function exibirResultado(float $valor, FormatadorResultado $formatador): string {
-    return $formatador->formatar($valor);
+interface FormatadorResultado
+{
+    public function formatar(float $valor): string;
 }
 
+class Usuario
+{
+    private Historico $historico;
+    private ?OperacaoMatematica $operacao = null;
+
+    public function __construct(private string $nome, private ?float $resultadoAtual = null)
+    {
+        $this->historico = new Historico();
+    }
+
+    public function setOperacao(OperacaoMatematica $op): void
+    {
+        $this->operacao = $op;
+    }
+
+    public function registrarOperacao(OperacaoMatematica $op, float $a, float $b): float
+    {
+        $res = $op->calcular($a, $b);
+        $this->resultadoAtual = $res;
+
+        $nome = $op instanceof OperacaoBase ? $op->getNomeOperacao() : 'Operacao';
+        
+        $this->historico->adicionarRegistro("{$nome}: {$a}, {$b} = {$res}");
+        return $res;
+    }
+
+    public function usarOperacaoAgregada(float $a, float $b): ?float
+    {
+        if ($this->operacao === null) {
+            return null;
+        }
+        return $this->registrarOperacao($this->operacao, $a, $b);
+    }
+
+    public function verHistorico(): array
+    {
+        return $this->historico->obterRegistros();
+    }
+
+    public function exibirResultado(float $valor, FormatadorResultado $formatador): string
+    {
+        return $formatador->formatar($valor);
+    }
+
+    public function getNome(): string
+    {
+        return $this->nome;
+    }
+
+    public function getResultadoAtual(): ?float
+    {
+        return $this->resultadoAtual;
+    }
 }
