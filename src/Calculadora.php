@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Calculadora;
@@ -15,13 +16,18 @@ class Calculadora
         $this->historico = new Historico();
     }
 
-    public function calcular(\OperacaoMatematica $operacao, float $valor1, float $valor2): float
-    {
+    public function calcular(
+        \OperacaoMatematica $operacao,
+        float $valor1,
+        float $valor2
+    ): float {
         $resultado = $operacao->calcular($valor1, $valor2);
 
-        $nomeOperacao = $operacao->getNomeOperacao();
-        
-        $this->historico->adicionarRegistro("{$nomeOperacao}: {$valor1} e {$valor2} = {$resultado}");
+        $nomeOperacao = $operacao->getNomeOperacaoMatematica();
+
+        $this->historico->adicionarRegistro(
+            "{$nomeOperacao}: {$valor1} e {$valor2} = {$resultado}"
+        );
 
         return $resultado;
     }
