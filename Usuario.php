@@ -38,7 +38,7 @@ class Usuario
         $res = $op->calcular($a, $b);
         $this->resultadoAtual = $res;
 
-        $nome = $op->getNomeOperacao();
+        $nome = $op->getNomeOperacaoMatematica();
 
         $this->historico->adicionarRegistro(
             "{$nome}: {$a}, {$b} = {$res}"

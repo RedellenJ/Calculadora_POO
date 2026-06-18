@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../interface.php';
+require_once __DIR__ . '/interface.php';
 
 abstract class OperacaoBase implements OperacaoMatematica
 {
