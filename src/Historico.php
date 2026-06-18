@@ -12,7 +12,7 @@ class Historico
         $this->registros[] = $registro;
     }
 
-    public function obtenerRegistros(): array 
+    public function obterRegistros(): array 
     {
         return $this->registros;
     }
