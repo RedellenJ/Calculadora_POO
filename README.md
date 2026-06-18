@@ -27,8 +27,3 @@ A Calculadora pode utilizar um formatador de resultados externo.
 - Vinícius
 - Matheus
 - ⁠Eduardo
-
-## Como Executar
-
-```bash
-php teste.php
